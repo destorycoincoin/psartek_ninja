@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - water
+  - wood
+  - transparency
+  - interrupt
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - wall
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 3743400547
+    locked: 0
+  - name: Ground Shadow
+    uniqueID: 4109361043
+    locked: 0
+  - name: Ground Montain
+    uniqueID: 3325703753
+    locked: 0
+  - name: Relative
+    uniqueID: 2009464663
+    locked: 0
+  - name: Front
+    uniqueID: 4195963823
+    locked: 0
