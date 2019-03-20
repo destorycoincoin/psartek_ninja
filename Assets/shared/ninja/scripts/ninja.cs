@@ -36,6 +36,7 @@ public class ninja : MonoBehaviour
     public float                camera_y_max;
     private bool                is_interrupt;
     private Collider2D          interrupt;
+    private footsteps           footsteps_script;
 
     // Use this for initialization
     void  initVar ()
@@ -50,7 +51,8 @@ public class ninja : MonoBehaviour
 		this.direction			= this.startDirection; //TEMP no more needed ?
 		this.onWood				= 0;
 		this.cyrilIneptitude	= 4.0f;
-        this.is_interrupt = false;
+        this.is_interrupt       = false;
+        this.footsteps_script   = GetComponent<footsteps>();
 	}
 	void Start ()
 	{
@@ -140,13 +142,15 @@ public class ninja : MonoBehaviour
 		{
 			this.animator.SetTrigger("jump");
 			this.jumpCooldown = 0.8f;
-			return;
+            this.footsteps_script.stop_walking();
+            return;
 		}
 		else if ((Input.GetKeyDown(KeyCode.A) || Input.GetButtonDown("Xbox360_L")) && this.dashCooldown <= 0)
 		{
 			this.animator.SetTrigger("dash");
 			this.dashCooldown	= 0.4f;
-			return;
+            this.footsteps_script.stop_walking();
+            return;
 		}
 		else if (Input.GetKeyDown(KeyCode.D) || Input.GetButtonDown("Xbox360_B"))
 		{
@@ -166,7 +170,8 @@ public class ninja : MonoBehaviour
 			this.animator.SetTrigger("teleport");
 			this.TeleportScript.ChangeState();
 			this.isTeleportReady = !this.isTeleportReady;
-			return;
+            this.footsteps_script.stop_walking();
+            return;
 		}
 
 		if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -201,7 +206,8 @@ public class ninja : MonoBehaviour
 			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
 			{
 				this.animator.SetTrigger("walk");
-			}
+                this.footsteps_script.start_walking();
+            }
 			this.rb.AddForce(1.5f * Vector2.up * this.cyrilIneptitude, ForceMode2D.Impulse);
 		}
 		else if ((this.MoveState == ninja.RIGHT || this.MoveState == ninja.STAY) && Input.GetKey(KeyCode.RightArrow) || Input.GetAxisRaw("Xbox360_Dpad_X") >= 0.5f || (Input.GetAxisRaw("Horizontal") >= 0.5f && !Input.GetKey(KeyCode.RightArrow)))
@@ -212,7 +218,8 @@ public class ninja : MonoBehaviour
 			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
 			{
 				this.animator.SetTrigger("walk");
-			}
+                this.footsteps_script.start_walking();
+            }
 			this.rb.AddForce(1.5f * Vector2.right * this.cyrilIneptitude, ForceMode2D.Impulse);
 		}
 		else if ((this.MoveState == ninja.LEFT || this.MoveState == ninja.STAY) && Input.GetKey(KeyCode.LeftArrow) || Input.GetAxisRaw("Xbox360_Dpad_X") <= -0.5f || (Input.GetAxisRaw("Horizontal") <= -0.5f && !Input.GetKey(KeyCode.LeftArrow)))
@@ -223,7 +230,8 @@ public class ninja : MonoBehaviour
 			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
 			{
 				this.animator.SetTrigger("walk");
-			}
+                this.footsteps_script.start_walking();
+            }
 			this.rb.AddForce(1.5f * Vector2.left * this.cyrilIneptitude, ForceMode2D.Impulse);
 		}
 		else if ((this.MoveState == ninja.DOWN || this.MoveState == ninja.STAY) && Input.GetKey(KeyCode.DownArrow) || Input.GetAxisRaw("Xbox360_Dpad_Y") <= -0.5f || (Input.GetAxisRaw("Vertical") <= -0.5f && !Input.GetKey(KeyCode.DownArrow)))
@@ -234,6 +242,7 @@ public class ninja : MonoBehaviour
 			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
 			{
 				this.animator.SetTrigger("walk");
+                this.footsteps_script.start_walking();
 			}
 			this.rb.AddForce(1.5f * Vector2.down * this.cyrilIneptitude, ForceMode2D.Impulse);
 		}
@@ -244,7 +253,8 @@ public class ninja : MonoBehaviour
 			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("stay") && this.jumpCooldown <= 0)
 			{
 				this.animator.SetTrigger("stay");
-			}
+                this.footsteps_script.stop_walking();
+            }
 		}
 	}
 
