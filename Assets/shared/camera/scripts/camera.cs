@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using System.Collections.Specialized;
 
 public class camera : MonoBehaviour {
-	public GameObject ninja;
 	private float zoom = 10;
 
 	// Use this for initialization

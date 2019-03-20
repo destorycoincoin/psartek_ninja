@@ -327,7 +327,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startDirection: 1
   animator: {fileID: 95511340839290084}
-  TeleportObject: {fileID: 1434509163867514}
   camera_x_min: -14.3
   camera_x_max: 14.3
   camera_y_min: -102.9

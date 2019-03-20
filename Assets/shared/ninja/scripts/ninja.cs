@@ -25,7 +25,7 @@ public class ninja : MonoBehaviour
 	private float				jumpCooldown;
 	private float				dashCooldown;
 	private bool				isTeleportReady;
-	public GameObject			TeleportObject; //FIX private
+	private GameObject			TeleportObject;
 	private teleport			TeleportScript;
 	private int					direction;
 	private int					onWood;
@@ -47,7 +47,8 @@ public class ninja : MonoBehaviour
 		this.jumpCooldown		= 0f;
 		this.dashCooldown		= 0f;
 		this.isTeleportReady	= false;
-		this.TeleportScript		= TeleportObject.GetComponent<teleport>();
+		this.TeleportObject		= GameObject.Find("Teleport");
+		this.TeleportScript		= this.TeleportObject.GetComponent<teleport>();
 		this.direction			= this.startDirection; //TEMP no more needed ?
 		this.onWood				= 0;
 		this.cyrilIneptitude	= 4.0f;
