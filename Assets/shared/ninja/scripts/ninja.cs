@@ -20,7 +20,6 @@ public class ninja : MonoBehaviour
 	private const int			RIGHT	= 2;
 	private const int			LEFT	= 3;
 	private const int			DOWN	= 4;
-	private int					MoveState;
 	private float				cooldown;
 	private float				jumpCooldown;
 	private float				dashCooldown;
@@ -28,6 +27,8 @@ public class ninja : MonoBehaviour
 	private GameObject			TeleportObject;
 	private teleport			TeleportScript;
 	private int					direction;
+	private Vector2				directionVec;
+	private Vector2				dashDirection;
 	private int					onWood;
 	private float				cyrilIneptitude;
     public float                camera_x_min;
@@ -42,7 +43,6 @@ public class ninja : MonoBehaviour
     void  initVar ()
 	{
 		this.rb					= GetComponent<Rigidbody2D>();
-		this.MoveState			= ninja.STAY;
 		this.cooldown			= 0f;
 		this.jumpCooldown		= 0f;
 		this.dashCooldown		= 0f;
@@ -50,6 +50,8 @@ public class ninja : MonoBehaviour
 		this.TeleportObject		= GameObject.Find("Teleport");
 		this.TeleportScript		= this.TeleportObject.GetComponent<teleport>();
 		this.direction			= this.startDirection; //TEMP no more needed ?
+		this.directionVec		= Vector2.zero;
+		this.dashDirection		= Vector2.zero;
 		this.onWood				= 0;
 		this.cyrilIneptitude	= 4.0f;
         this.is_interrupt       = false;
@@ -107,6 +109,31 @@ public class ninja : MonoBehaviour
 	void Update ()
 	{
 		this.rb.velocity = Vector2.zero;
+		this.directionVec = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+		this.directionVec.Normalize();
+		if (this.cooldown <= 0f && this.dashCooldown < 0.2f)
+		{
+			if (this.directionVec.y >= 0.5f)
+			{
+				this.direction = ninja.UP;
+				this.animator.SetFloat("direction", 1.0f);
+			}
+			else if (this.directionVec.y <= -0.5f)
+			{
+				this.direction = ninja.DOWN;
+				this.animator.SetFloat("direction", 4.0f);
+			}
+			else if (this.directionVec.x <= -0.5f)
+			{
+				this.direction = ninja.LEFT;
+				this.animator.SetFloat("direction", 3.0f);
+			}
+			else if (this.directionVec.x >= 0.5f)
+			{
+				this.direction = ninja.RIGHT;
+				this.animator.SetFloat("direction", 2.0f);
+			}
+		}
 
 		if (this.cooldown >= 0f)
 		{
@@ -120,15 +147,7 @@ public class ninja : MonoBehaviour
 
 			if (this.dashCooldown >= 0.2f)
 			{
-				if (this.direction == ninja.UP)
-					this.rb.AddForce(5f * Vector2.up * this.cyrilIneptitude, ForceMode2D.Impulse);
-				else if (this.direction == ninja.RIGHT)
-					this.rb.AddForce(5f * Vector2.right * this.cyrilIneptitude, ForceMode2D.Impulse);
-				else if (this.direction == ninja.LEFT)
-					this.rb.AddForce(5f * Vector2.left * this.cyrilIneptitude, ForceMode2D.Impulse);
-				else if (this.direction == ninja.DOWN)
-					this.rb.AddForce(5f * Vector2.down * this.cyrilIneptitude, ForceMode2D.Impulse);
-
+				this.rb.AddForce(5f * this.dashDirection * this.cyrilIneptitude, ForceMode2D.Impulse);
 				return;
 			}
 		}
@@ -149,8 +168,18 @@ public class ninja : MonoBehaviour
 		else if ((Input.GetKeyDown(KeyCode.A) || Input.GetButtonDown("Xbox360_L")) && this.dashCooldown <= 0)
 		{
 			this.animator.SetTrigger("dash");
-			this.dashCooldown	= 0.4f;
-            this.footsteps_script.stop_walking();
+			this.dashCooldown = 0.4f;
+			if (this.directionVec != Vector2.zero)
+				this.dashDirection = this.directionVec;
+			else if (this.direction == ninja.UP)
+				this.dashDirection = Vector2.up;
+			else if (this.direction == ninja.RIGHT)
+				this.dashDirection = Vector2.right;
+			else if (this.direction == ninja.LEFT)
+				this.dashDirection = Vector2.left;
+			else
+				this.dashDirection = Vector2.down;
+			this.footsteps_script.stop_walking();
             return;
 		}
 		else if (Input.GetKeyDown(KeyCode.D) || Input.GetButtonDown("Xbox360_B"))
@@ -175,87 +204,19 @@ public class ninja : MonoBehaviour
             return;
 		}
 
-		if (Input.GetKeyDown(KeyCode.UpArrow))
+		if (this.directionVec != Vector2.zero)
 		{
-			this.MoveState = ninja.UP;
-		}
-		else if (Input.GetKeyDown(KeyCode.RightArrow))
-		{
-			this.MoveState = ninja.RIGHT;
-		}
-		else if (Input.GetKeyDown(KeyCode.LeftArrow))
-		{
-			this.MoveState = ninja.LEFT;
-		}
-		else if (Input.GetKeyDown(KeyCode.DownArrow))
-		{
-			this.MoveState = ninja.DOWN;
-		}
-		else if ((this.MoveState == ninja.UP && !Input.GetKey(KeyCode.UpArrow))
-				|| (this.MoveState == ninja.RIGHT && !Input.GetKey(KeyCode.RightArrow))
-				|| (this.MoveState == ninja.LEFT && !Input.GetKey(KeyCode.LeftArrow))
-				|| (this.MoveState == ninja.DOWN && !Input.GetKey(KeyCode.DownArrow)))
-		{
-			this.MoveState = ninja.STAY;
-		}
-
-		if ((this.MoveState == ninja.UP || this.MoveState == ninja.STAY) && Input.GetKey(KeyCode.UpArrow) || Input.GetAxisRaw("Xbox360_Dpad_Y") >= 0.5f || (Input.GetAxisRaw("Vertical") >= 0.5f && !Input.GetKey(KeyCode.UpArrow)))
-		{
-			this.MoveState = ninja.UP;
-			this.direction = ninja.UP;
-			this.animator.SetFloat("direction", 1.0f);
 			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
 			{
 				this.animator.SetTrigger("walk");
-                this.footsteps_script.start_walking();
-            }
-			this.rb.AddForce(1.5f * Vector2.up * this.cyrilIneptitude, ForceMode2D.Impulse);
-		}
-		else if ((this.MoveState == ninja.RIGHT || this.MoveState == ninja.STAY) && Input.GetKey(KeyCode.RightArrow) || Input.GetAxisRaw("Xbox360_Dpad_X") >= 0.5f || (Input.GetAxisRaw("Horizontal") >= 0.5f && !Input.GetKey(KeyCode.RightArrow)))
-		{
-			this.MoveState = ninja.RIGHT;
-			this.direction = ninja.RIGHT;
-			this.animator.SetFloat("direction", 2.0f);
-			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
-			{
-				this.animator.SetTrigger("walk");
-                this.footsteps_script.start_walking();
-            }
-			this.rb.AddForce(1.5f * Vector2.right * this.cyrilIneptitude, ForceMode2D.Impulse);
-		}
-		else if ((this.MoveState == ninja.LEFT || this.MoveState == ninja.STAY) && Input.GetKey(KeyCode.LeftArrow) || Input.GetAxisRaw("Xbox360_Dpad_X") <= -0.5f || (Input.GetAxisRaw("Horizontal") <= -0.5f && !Input.GetKey(KeyCode.LeftArrow)))
-		{
-			this.MoveState = ninja.LEFT;
-			this.direction = ninja.LEFT;
-			this.animator.SetFloat("direction", 3.0f);
-			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
-			{
-				this.animator.SetTrigger("walk");
-                this.footsteps_script.start_walking();
-            }
-			this.rb.AddForce(1.5f * Vector2.left * this.cyrilIneptitude, ForceMode2D.Impulse);
-		}
-		else if ((this.MoveState == ninja.DOWN || this.MoveState == ninja.STAY) && Input.GetKey(KeyCode.DownArrow) || Input.GetAxisRaw("Xbox360_Dpad_Y") <= -0.5f || (Input.GetAxisRaw("Vertical") <= -0.5f && !Input.GetKey(KeyCode.DownArrow)))
-		{
-			this.MoveState = ninja.DOWN;
-			this.direction = ninja.DOWN;
-			this.animator.SetFloat("direction", 4.0f);
-			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
-			{
-				this.animator.SetTrigger("walk");
-                this.footsteps_script.start_walking();
+				this.footsteps_script.start_walking();
 			}
-			this.rb.AddForce(1.5f * Vector2.down * this.cyrilIneptitude, ForceMode2D.Impulse);
+			this.rb.AddForce(1.5f * this.directionVec * this.cyrilIneptitude, ForceMode2D.Impulse);
 		}
-		else
+		else if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("stay") && this.jumpCooldown <= 0)
 		{
-			this.MoveState = ninja.STAY;
-			this.animator.SetFloat("direction", this.direction);
-			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("stay") && this.jumpCooldown <= 0)
-			{
-				this.animator.SetTrigger("stay");
-                this.footsteps_script.stop_walking();
-            }
+			this.animator.SetTrigger("stay");
+			this.footsteps_script.stop_walking();
 		}
 	}
 
