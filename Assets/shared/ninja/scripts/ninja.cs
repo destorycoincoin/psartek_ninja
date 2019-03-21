@@ -62,7 +62,8 @@ public class ninja : MonoBehaviour
 		this.initVar();
         this.transform.position = new Vector2(shared_data.Ninja_x, shared_data.Ninja_y);
         this.direction = shared_data.Start_direction;
-    }
+		this.animator.SetFloat("direction", this.direction);
+	}
 
 	// only on stay ?
 	void OnTriggerEnter2D(Collider2D other)
@@ -113,26 +114,21 @@ public class ninja : MonoBehaviour
 		this.directionVec.Normalize();
 		if (this.cooldown <= 0f && this.dashCooldown < 0.2f)
 		{
-			if (this.directionVec.y >= 0.5f)
+			if (Mathf.Abs(this.directionVec.y) > Mathf.Abs(this.directionVec.x))
 			{
-				this.direction = ninja.UP;
-				this.animator.SetFloat("direction", 1.0f);
+				if (this.directionVec.y > 0)
+					this.direction = ninja.UP;
+				else if (this.directionVec.y < 0)
+					this.direction = ninja.DOWN;
 			}
-			else if (this.directionVec.y <= -0.5f)
+			else if (Mathf.Abs(this.directionVec.x) > Mathf.Abs(this.directionVec.y))
 			{
-				this.direction = ninja.DOWN;
-				this.animator.SetFloat("direction", 4.0f);
+				if (this.directionVec.x > 0)
+					this.direction = ninja.RIGHT;
+				else if (this.directionVec.x < 0)
+					this.direction = ninja.LEFT;
 			}
-			else if (this.directionVec.x <= -0.5f)
-			{
-				this.direction = ninja.LEFT;
-				this.animator.SetFloat("direction", 3.0f);
-			}
-			else if (this.directionVec.x >= 0.5f)
-			{
-				this.direction = ninja.RIGHT;
-				this.animator.SetFloat("direction", 2.0f);
-			}
+			this.animator.SetFloat("direction", this.direction);
 		}
 
 		if (this.cooldown >= 0f)
@@ -156,7 +152,7 @@ public class ninja : MonoBehaviour
 		{
 			this.jumpCooldown -= Time.deltaTime;
 		}
-        else if (this.is_interrupt && Input.GetButtonDown("Xbox360_X"))
+        else if (this.is_interrupt && (Input.GetButtonDown("Xbox360_X") || Input.GetKeyDown(KeyCode.L)))
             this.interrupt.gameObject.GetComponent<fence_door>().Change();
         else if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Xbox360_A"))
 		{
@@ -165,7 +161,7 @@ public class ninja : MonoBehaviour
             this.footsteps_script.stop_walking();
             return;
 		}
-		else if ((Input.GetKeyDown(KeyCode.A) || Input.GetButtonDown("Xbox360_L")) && this.dashCooldown <= 0)
+		else if ((Input.GetKeyDown(KeyCode.J) || Input.GetButtonDown("Xbox360_L")) && this.dashCooldown <= 0)
 		{
 			this.animator.SetTrigger("dash");
 			this.dashCooldown = 0.4f;
@@ -182,7 +178,7 @@ public class ninja : MonoBehaviour
 			this.footsteps_script.stop_walking();
             return;
 		}
-		else if (Input.GetKeyDown(KeyCode.D) || Input.GetButtonDown("Xbox360_B"))
+		else if (Input.GetKeyDown(KeyCode.K) || Input.GetButtonDown("Xbox360_B"))
 		{
 			if (this.isTeleportReady)
 			{
