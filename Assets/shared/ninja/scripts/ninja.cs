@@ -37,7 +37,7 @@ public class ninja : MonoBehaviour
     public float                camera_y_max;
     private bool                is_interrupt;
     private Collider2D          interrupt;
-    private footsteps           footsteps_script;
+    private ninja_audio         ninja_audio_script;
 
     // Use this for initialization
     void  initVar ()
@@ -55,7 +55,7 @@ public class ninja : MonoBehaviour
 		this.onWood				= 0;
 		this.cyrilIneptitude	= 4.0f;
         this.is_interrupt       = false;
-        this.footsteps_script   = GetComponent<footsteps>();
+        this.ninja_audio_script   = GetComponent<ninja_audio>();
 	}
 	void Start ()
 	{
@@ -158,7 +158,7 @@ public class ninja : MonoBehaviour
 		{
 			this.animator.SetTrigger("jump");
 			this.jumpCooldown = 0.8f;
-            this.footsteps_script.stop_walking();
+            this.ninja_audio_script.stop_walking();
             return;
 		}
 		else if ((Input.GetKeyDown(KeyCode.J) || Input.GetButtonDown("Xbox360_L")) && this.dashCooldown <= 0)
@@ -175,7 +175,7 @@ public class ninja : MonoBehaviour
 				this.dashDirection = Vector2.left;
 			else
 				this.dashDirection = Vector2.down;
-			this.footsteps_script.stop_walking();
+			this.ninja_audio_script.dash();
             return;
 		}
 		else if (Input.GetKeyDown(KeyCode.K) || Input.GetButtonDown("Xbox360_B"))
@@ -196,7 +196,7 @@ public class ninja : MonoBehaviour
 			this.animator.SetTrigger("teleport");
 			this.TeleportScript.ChangeState();
 			this.isTeleportReady = !this.isTeleportReady;
-            this.footsteps_script.stop_walking();
+            this.ninja_audio_script.stop_walking();
             return;
 		}
 
@@ -205,14 +205,14 @@ public class ninja : MonoBehaviour
 			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
 			{
 				this.animator.SetTrigger("walk");
-				this.footsteps_script.start_walking();
+				this.ninja_audio_script.start_walking();
 			}
 			this.rb.AddForce(1.5f * this.directionVec * this.cyrilIneptitude, ForceMode2D.Impulse);
 		}
 		else if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("stay") && this.jumpCooldown <= 0)
 		{
 			this.animator.SetTrigger("stay");
-			this.footsteps_script.stop_walking();
+			this.ninja_audio_script.stop_walking();
 		}
 	}
 
