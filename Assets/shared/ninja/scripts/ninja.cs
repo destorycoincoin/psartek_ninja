@@ -199,6 +199,13 @@ public class ninja : MonoBehaviour
             this.ninja_audio_script.stop_walking();
             return;
 		}
+		else if (Input.GetKeyDown(KeyCode.I) || Input.GetButtonDown("Xbox360_X"))
+		{
+			this.animator.SetTrigger("attack_weak");
+			this.cooldown = 0.3f;
+			this.ninja_audio_script.stop_walking();
+			return;
+		}
 
 		if (this.directionVec != Vector2.zero)
 		{
