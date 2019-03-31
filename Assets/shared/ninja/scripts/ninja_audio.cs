@@ -7,6 +7,10 @@ public class ninja_audio : MonoBehaviour {
 
     public AudioClip[] audio_step_array;
     public AudioClip[] audio_dash_array;
+    public AudioClip[] audio_jump_array;
+    public AudioClip[] audio_attack_weak_array;
+    public AudioClip audio_tp_cast;
+    public AudioClip audio_tp_reappear;
     public float audio_step_length;
     private float time;
     private AudioSource[] audio_source;
@@ -40,6 +44,34 @@ public class ninja_audio : MonoBehaviour {
         is_walking = false;
         audio_source[1].clip = audio_dash_array[rand.Next(0, audio_dash_array.Length)];
         audio_source[1].Play();
+    }
+
+    public void jump()
+    {
+        is_walking = false;
+        audio_source[2].clip = audio_jump_array[rand.Next(0, audio_dash_array.Length)];
+        audio_source[2].Play();
+    }
+
+    public void attack_weak()
+    {
+        is_walking = false;
+        audio_source[3].clip = audio_attack_weak_array[rand.Next(0, audio_dash_array.Length)];
+        audio_source[3].Play();
+    }
+
+    public void tp_cast()
+    {
+        is_walking = false;
+        audio_source[4].clip = audio_tp_cast;
+        audio_source[4].Play();
+    }
+
+    public void tp_reappear()
+    {
+        is_walking = false;
+        audio_source[5].clip = audio_tp_reappear;
+        audio_source[5].Play();
     }
 
     // Update is called once per frame

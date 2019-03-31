@@ -158,7 +158,7 @@ public class ninja : MonoBehaviour
 		{
 			this.animator.SetTrigger("jump");
 			this.jumpCooldown = 0.8f;
-            this.ninja_audio_script.stop_walking();
+            this.ninja_audio_script.jump();
             return;
 		}
 		else if ((Input.GetKeyDown(KeyCode.J) || Input.GetButtonDown("Xbox360_L")) && this.dashCooldown <= 0)
@@ -185,26 +185,27 @@ public class ninja : MonoBehaviour
 				this.transform.position = this.TeleportObject.transform.position;
 				this.animator.SetFloat("teleport_start", 0);
 				this.cooldown = 0.4f;
-			}
+                this.ninja_audio_script.tp_reappear();
+            }
 			else
 			{
 				this.TeleportObject.transform.position = this.transform.position;
 				this.animator.SetFloat("teleport_start", 1);
 				this.cooldown = 0.8f;
-			}
+                this.ninja_audio_script.tp_cast();
+            }
 
 			this.animator.SetTrigger("teleport");
 			this.TeleportScript.ChangeState();
 			this.isTeleportReady = !this.isTeleportReady;
-            this.ninja_audio_script.stop_walking();
             return;
 		}
 		else if (Input.GetKeyDown(KeyCode.I) || Input.GetButtonDown("Xbox360_X"))
 		{
 			this.animator.SetTrigger("attack_weak");
 			this.cooldown = 0.3f;
-			this.ninja_audio_script.stop_walking();
-			return;
+            this.ninja_audio_script.attack_weak();
+            return;
 		}
 
 		if (this.directionVec != Vector2.zero)
