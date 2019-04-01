@@ -456,8 +456,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: feae58af130803e4f8d893017c62f70a, type: 3}
   - {fileID: 8300000, guid: 98c7fae7745c18b4ba78731ec4aaa7bf, type: 3}
   audio_jump_array:
-  - {fileID: 8300000, guid: 18541d17a7fa62d459829ca045c76e9f, type: 3}
-  - {fileID: 8300000, guid: b0d17ce1d062df5448873534af1316cd, type: 3}
+  - {fileID: 8300000, guid: 67fe20a56539bc443b997d054aa5d2ca, type: 3}
+  - {fileID: 8300000, guid: fc39b0cdf7885854e8f2bdc0e6a8c5c8, type: 3}
   audio_attack_weak_array:
   - {fileID: 8300000, guid: 8f80a823a043cc94baffd77acd876aef, type: 3}
   - {fileID: 8300000, guid: 09740ec8f3dc1364a89f34ee7980ad90, type: 3}
