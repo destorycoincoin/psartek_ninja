@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 212922768852075388}
   - component: {fileID: 114852261805421192}
   - component: {fileID: 95202917602782210}
+  - component: {fileID: 82010008581306892}
   m_Layer: 0
   m_Name: Teleport
   m_TagString: Untagged
@@ -60,7 +61,7 @@ GameObject:
   - component: {fileID: 210834131008161774}
   - component: {fileID: 82630505161193262}
   - component: {fileID: 114424514231749692}
-  - component: {fileID: 82114003726408410}
+  - component: {fileID: 81917857266260500}
   m_Layer: 8
   m_Name: Ninja
   m_TagString: Player
@@ -184,29 +185,36 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.1}
   m_EdgeRadius: 0
---- !u!82 &82114003726408410
-AudioSource:
+--- !u!81 &81917857266260500
+AudioListener:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1473742685315046}
   m_Enabled: 1
+--- !u!82 &82010008581306892
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1434509163867514}
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 9258dc6d7d63d444988d73f30f7ededd, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 3
+  MaxDistance: 12
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -214,23 +222,23 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
+      time: 0.25
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.096477054
+      outSlope: -0.096477054
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0.46067414
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: -1.3333334
+      outSlope: -1.3333334
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -239,7 +247,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -290,7 +298,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.346
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -439,15 +447,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audio_step_array:
-  - {fileID: 8300000, guid: 9889ca5ad4b999e408891e166d4e2b55, type: 3}
-  - {fileID: 8300000, guid: 07a1731e75be22d468563a2304d96217, type: 3}
-  - {fileID: 8300000, guid: 16f98445c50b3b04c817871458a2c21f, type: 3}
-  - {fileID: 8300000, guid: 1356d091ef754f24eadff11a9e14c121, type: 3}
-  - {fileID: 8300000, guid: 7a20a92b87c6dd049a1716d7e62eca57, type: 3}
+  - {fileID: 8300000, guid: 0ff9e6c9f9136c543954e900be1d35fe, type: 3}
+  - {fileID: 8300000, guid: 38699790ac4e73d46beb9e9a986db494, type: 3}
+  - {fileID: 8300000, guid: d6c7e35c13996b94bae7be09deb786f4, type: 3}
+  - {fileID: 8300000, guid: b26f4712faab4094c96b4f9bd658e000, type: 3}
   audio_dash_array:
   - {fileID: 8300000, guid: 4cc5148f43644cf43b5efd9222f57874, type: 3}
   - {fileID: 8300000, guid: feae58af130803e4f8d893017c62f70a, type: 3}
   - {fileID: 8300000, guid: 98c7fae7745c18b4ba78731ec4aaa7bf, type: 3}
+  audio_jump_array:
+  - {fileID: 8300000, guid: 18541d17a7fa62d459829ca045c76e9f, type: 3}
+  - {fileID: 8300000, guid: b0d17ce1d062df5448873534af1316cd, type: 3}
+  audio_attack_weak_array:
+  - {fileID: 8300000, guid: 8f80a823a043cc94baffd77acd876aef, type: 3}
+  - {fileID: 8300000, guid: 09740ec8f3dc1364a89f34ee7980ad90, type: 3}
+  - {fileID: 8300000, guid: d4ad4570d507c894fbcddcd3aa5f5703, type: 3}
+  audio_tp_cast: {fileID: 8300000, guid: 60e012a5116f0ed40954c3586c5c4003, type: 3}
+  audio_tp_reappear: {fileID: 8300000, guid: 4c7fa15f28b506742868d84bee22fe33, type: 3}
   audio_step_length: 0.3
 --- !u!114 &114852261805421192
 MonoBehaviour:
