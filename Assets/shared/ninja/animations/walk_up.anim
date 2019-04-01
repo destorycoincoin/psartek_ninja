@@ -3,7 +3,7 @@
 --- !u!74 &7400000
 AnimationClip:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: walk_up
   serializedVersion: 6
@@ -28,8 +28,6 @@ AnimationClip:
       value: {fileID: 21300000, guid: 0e7e1cade45778c45b3b6034a74a65ea, type: 3}
     - time: 0.4
       value: {fileID: 21300000, guid: bb0d1276d703713478a2250ae574e969, type: 3}
-    - time: 0.5
-      value: {fileID: 21300000, guid: 3f028727aac7a304095414bcc657888a, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -54,13 +52,12 @@ AnimationClip:
     - {fileID: 21300000, guid: aa8ea56252cbccf4680147e308dc14e5, type: 3}
     - {fileID: 21300000, guid: 0e7e1cade45778c45b3b6034a74a65ea, type: 3}
     - {fileID: 21300000, guid: bb0d1276d703713478a2250ae574e969, type: 3}
-    - {fileID: 21300000, guid: 3f028727aac7a304095414bcc657888a, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.6
+    m_StopTime: 0.5
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
