@@ -6,11 +6,13 @@ public class teleport : MonoBehaviour
 {
 	public Animator		animator;
 	private bool		isStarted;
+	private AudioSource audio_source;
 
 	// Use this for initialization
 	void Start ()
 	{
 		this.isStarted = false;
+		this.audio_source = this.GetComponent<AudioSource>();
 	}
 
 	public void ChangeState()
@@ -19,6 +21,7 @@ public class teleport : MonoBehaviour
 		{
 			this.isStarted = false;
 			this.animator.SetTrigger("teleport_end");
+			this.audio_source.Stop();
 		}
 		else
 		{
@@ -31,6 +34,7 @@ public class teleport : MonoBehaviour
 		yield return new WaitForSeconds(0.6f);
 		this.isStarted = true;
 		this.animator.SetTrigger("teleport_start");
+		this.audio_source.Play();
 	}
 
 	// Update is called once per frame
