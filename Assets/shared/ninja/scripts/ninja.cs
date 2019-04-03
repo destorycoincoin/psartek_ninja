@@ -11,11 +11,8 @@ using UnityEngine.SceneManagement; // here ?
 // TEMP think about DIRECTION
 public class ninja : MonoBehaviour
 {
-	public int					startDirection;
-	public Animator				animator;
-	private SpriteRenderer		sprite;
+	private Animator			animator;
 	private Rigidbody2D			rb;
-	private const int			STAY	= 0;
 	private const int			UP		= 1;
 	private const int			RIGHT	= 2;
 	private const int			LEFT	= 3;
@@ -43,13 +40,13 @@ public class ninja : MonoBehaviour
     void  initVar ()
 	{
 		this.rb					= GetComponent<Rigidbody2D>();
+		this.animator			= GetComponent<Animator>();
 		this.cooldown			= 0f;
 		this.jumpCooldown		= 0f;
 		this.dashCooldown		= 0f;
 		this.isTeleportReady	= false;
 		this.TeleportObject		= GameObject.Find("Teleport");
 		this.TeleportScript		= this.TeleportObject.GetComponent<teleport>();
-		this.direction			= this.startDirection; //TEMP no more needed ?
 		this.directionVec		= Vector2.zero;
 		this.dashDirection		= Vector2.zero;
 		this.onWood				= 0;
