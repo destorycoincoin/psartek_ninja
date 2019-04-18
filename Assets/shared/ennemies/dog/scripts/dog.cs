@@ -14,6 +14,9 @@ public class dog : MonoBehaviour {
 	private Vector2 startPosition;
 	private float cooldown;
 	private float cyrilIneptitude;
+	public int damages;
+	private int hp;
+	private GameObject[] hitboxArray;
 
 	// Use this for initialization
 	void InitVar()
@@ -24,12 +27,29 @@ public class dog : MonoBehaviour {
 		this.cyrilIneptitude = 4.0f;
 		this.startPosition = this.transform.position;
 		this.ninjaObject = GameObject.Find("Ninja");
+		this.damages = 25;
+		this.hitboxArray = new GameObject[5];
+		this.hitboxArray[dog.UP] = this.transform.Find("hitbox_up").gameObject;
+		this.hitboxArray[dog.RIGHT] = this.transform.Find("hitbox_right").gameObject;
+		this.hitboxArray[dog.LEFT] = this.transform.Find("hitbox_left").gameObject;
+		this.hitboxArray[dog.DOWN] = this.transform.Find("hitbox_down").gameObject;
+		this.hp = 200;
 	}
 	void Start () {
 		this.InitVar();
 		this.animator.SetFloat("direction", this.startDirection);
 	}
-	
+
+	public void Hit(int damages)
+	{
+		this.hp -= damages;
+		Debug.Log("dog hp = " + this.hp);
+		if (this.hp <= 0)
+			Destroy(this.gameObject);
+		this.animator.SetTrigger("hit");
+		this.cooldown = 0.5f;
+	}
+
 	void UpdateDirection(Vector2 moveDirection)
 	{
 		if (Mathf.Abs(moveDirection.y) > Mathf.Abs(moveDirection.x))
@@ -63,7 +83,8 @@ public class dog : MonoBehaviour {
 		this.UpdateDirection(attackDirection);
 		if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("attack"))
 			this.animator.SetTrigger("attack");
-		this.cooldown = 0.5f;
+		this.hitboxArray[(int)this.animator.GetFloat("direction")].SetActive(true);
+		this.cooldown = 1f;
 	}
 
 	void ResetStart()
@@ -74,12 +95,14 @@ public class dog : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-		if (this.cooldown >= 0f)
+		this.rb.velocity = Vector2.zero;
+		if (this.cooldown > 0f)
 		{
 			this.cooldown -= Time.deltaTime;
+			if (this.hitboxArray[(int)this.animator.GetFloat("direction")].activeSelf && this.cooldown <= 0.5f)
+				this.hitboxArray[(int)this.animator.GetFloat("direction")].SetActive(false);
 			return;
-		}
-		this.rb.velocity = Vector2.zero;
+		}	
 		if (Vector2.Distance(this.transform.position, this.ninjaObject.transform.position) < 1.25f)
 			this.Attack(new Vector2(this.ninjaObject.transform.position.x - this.transform.position.x, this.ninjaObject.transform.position.y - this.transform.position.y));
 		else if (Vector2.Distance(this.transform.position, this.ninjaObject.transform.position) < 10)

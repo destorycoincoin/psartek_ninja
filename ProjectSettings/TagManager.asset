@@ -8,6 +8,8 @@ TagManager:
   - wood
   - transparency
   - interrupt
+  - enemy
+  - hitbox
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - 
   - 
   - wall
-  - 
+  - enemy
   - 
   - 
   - 

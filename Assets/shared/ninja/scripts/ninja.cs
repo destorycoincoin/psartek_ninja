@@ -35,9 +35,11 @@ public class ninja : MonoBehaviour
     private bool                is_interrupt;
     private Collider2D          interrupt;
     private ninja_audio         ninja_audio_script;
+	private int					hp;
+	private GameObject[]		hitboxArray;
 
-    // Use this for initialization
-    void  initVar ()
+	// Use this for initialization
+	void  initVar ()
 	{
 		this.rb					= GetComponent<Rigidbody2D>();
 		this.animator			= GetComponent<Animator>();
@@ -52,7 +54,13 @@ public class ninja : MonoBehaviour
 		this.onWood				= 0;
 		this.cyrilIneptitude	= 4.0f;
         this.is_interrupt       = false;
-        this.ninja_audio_script   = GetComponent<ninja_audio>();
+        this.ninja_audio_script = GetComponent<ninja_audio>();
+		this.hp					= 100;
+		this.hitboxArray		= new GameObject[5];
+		this.hitboxArray[ninja.UP]		= this.transform.Find("hitbox_up").gameObject;
+		this.hitboxArray[ninja.RIGHT]	= this.transform.Find("hitbox_right").gameObject;
+		this.hitboxArray[ninja.LEFT]	= this.transform.Find("hitbox_left").gameObject;
+		this.hitboxArray[ninja.DOWN]	= this.transform.Find("hitbox_down").gameObject;
 	}
 	void Start ()
 	{
@@ -60,6 +68,14 @@ public class ninja : MonoBehaviour
         this.transform.position = new Vector2(shared_data.Ninja_x, shared_data.Ninja_y);
         this.direction = shared_data.Start_direction;
 		this.animator.SetFloat("direction", this.direction);
+	}
+
+	public void Hit (int damages)
+	{
+		this.hp -= damages;
+		Debug.Log("hp = " + this.hp);
+		if (this.hp <= 0)
+			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
 	// only on stay ?
@@ -71,12 +87,12 @@ public class ninja : MonoBehaviour
 		{
 			other.gameObject.GetComponent<SpriteRenderer>().color = new Vector4(1f, 1f, 1f, 0.8f);
 		}
-        if (other.CompareTag("interrupt"))
+		else if (other.CompareTag("interrupt"))
         {
             this.is_interrupt = true;
             this.interrupt = other;
         }
-    }
+	}
 
 	void OnTriggerStay2D(Collider2D other)
 	{
@@ -128,9 +144,11 @@ public class ninja : MonoBehaviour
 			this.animator.SetFloat("direction", this.direction);
 		}
 
-		if (this.cooldown >= 0f)
+		if (this.cooldown > 0f)
 		{
 			this.cooldown -= Time.deltaTime;
+			if (this.cooldown <= 0f)
+				this.hitboxArray[(int)this.animator.GetFloat("direction")].SetActive(false);
 			return;
 		}
 
@@ -202,7 +220,9 @@ public class ninja : MonoBehaviour
 			this.animator.SetTrigger("attack_weak");
 			this.cooldown = 0.3f;
             this.ninja_audio_script.attack_weak();
-            return;
+			this.hitboxArray[(int)this.animator.GetFloat("direction")].SetActive(true);
+
+			return;
 		}
 
 		if (this.directionVec != Vector2.zero)
