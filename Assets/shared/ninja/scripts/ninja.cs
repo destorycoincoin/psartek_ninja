@@ -28,10 +28,6 @@ public class ninja : MonoBehaviour
 	private Vector2				dashDirection;
 	private int					onWood;
 	private float				cyrilIneptitude;
-    public float                camera_x_min;
-    public float                camera_x_max;
-    public float                camera_y_min;
-    public float                camera_y_max;
     private bool                is_interrupt;
     private Collider2D          interrupt;
     private ninja_audio         ninja_audio_script;
@@ -65,7 +61,8 @@ public class ninja : MonoBehaviour
 	void Start ()
 	{
 		this.initVar();
-        this.transform.position = new Vector2(shared_data.Ninja_x, shared_data.Ninja_y);
+        if (shared_data.Ninja_x != 0 || shared_data.Ninja_y != 0)
+            this.transform.position = new Vector2(shared_data.Ninja_x, shared_data.Ninja_y);
         this.direction = shared_data.Start_direction;
 		this.animator.SetFloat("direction", this.direction);
 	}
@@ -224,8 +221,10 @@ public class ninja : MonoBehaviour
 
 			return;
 		}
+        else if (Input.GetKey(KeyCode.R))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-		if (this.directionVec != Vector2.zero)
+        if (this.directionVec != Vector2.zero)
 		{
 			if (!this.animator.GetCurrentAnimatorStateInfo(0).IsName("walk") && this.jumpCooldown <= 0)
 			{
@@ -239,28 +238,6 @@ public class ninja : MonoBehaviour
 			this.animator.SetTrigger("stay");
 			this.ninja_audio_script.stop_walking();
 		}
-	}
-
-	void LateUpdate ()
-	{
-        float camera_x;
-        float camera_y;
-
-        if (transform.localPosition.x < this.camera_x_min)
-            camera_x = this.camera_x_min;
-        else if (transform.localPosition.x > this.camera_x_max)
-            camera_x = this.camera_x_max;
-        else
-            camera_x = transform.localPosition.x;
-        if (transform.localPosition.y < this.camera_y_min)
-            camera_y = this.camera_y_min;
-        else if (transform.localPosition.y > this.camera_y_max)
-            camera_y = this.camera_y_max;
-        else
-            camera_y = transform.localPosition.y;
-
-
-        Camera.main.transform.localPosition = new Vector3(camera_x, camera_y, -10.0f);
 	}
 }
 
